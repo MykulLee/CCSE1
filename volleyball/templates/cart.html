@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Cart</h1>
+
+<div class="row">
+    {% for item in cart_items %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="{{ item.product.image }}" class="card-img-top" alt="{{ item.product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text">£{{ item.product.price }}</p>
+                    <p class="card-text">Quantity: {{ item.quantity }}</p>
+                    <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger">Remove</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'clear_cart' %}" class="btn btn-warning" style="margin-top: 20px;">Clear Cart</a>
+<a href="{% url 'checkout' %}" class="btn btn-success" style="margin-top: 20px;">Proceed to Checkout</a>
+
+{% endblock %}

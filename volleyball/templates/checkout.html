@@ -1,0 +1,18 @@
+<h1>Checkout</h1>
+<form method="post" action="{% url 'place_order' %}" style="text-align: center;">
+    {% csrf_token %}
+    <label for="delivery_address" style="font-size: 20px;">Delivery Address:</label><br>
+    <input type="text" name="delivery_address" required style="padding: 10px; font-size: 18px; margin: 10px;"><br>
+    <label for="payment_details" style="font-size: 20px;">Payment Details:</label><br>
+    <input type="text" name="payment_details" required style="padding: 10px; font-size: 18px; margin: 10px;"><br>
+    {% for product in products %}
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <label for="quantity_{{ product.id }}">Quantity for {{ product.name }}:</label>
+        <input type="number" name="quantity" min="1" value="1"><br>
+    {% endfor %}
+    <button type="submit" style="padding: 15px 30px; font-size: 20px;">Place Order</button>
+</form>
+
+{% if message %}
+<p style="text-align: center; font-size: 18px; color: green;">{{ message }}</p>
+{% endif %}

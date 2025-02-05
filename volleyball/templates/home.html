@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Victorious Volleyball</h1>
+
+<div class="row">
+    {% for volleyball in volleyball %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="{{ volleyball.image }}" class="card-img-top" alt="{{ volleyball.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ volleyball.name }}</h5>
+                    <p class="card-text">£{{ volleyball.price }}</p>
+                    <a href="{% url 'add_to_cart' volleyball.id %}" class="btn btn-primary">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'view_cart' %}" class="btn btn-secondary" style="position: fixed; bottom: 20px; right: 20px;">View Cart</a>
+{% endblock %}
