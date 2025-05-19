@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import update_session_auth_hash
 User = get_user_model()
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from .models import Order
 
 
@@ -158,7 +158,7 @@ def account_view(request):
 
 
 
-@csrf_exempt
+@csrf_protect       #token check now enforced
 def place_order(request):
     if request.method == "POST":
         user = request.user
