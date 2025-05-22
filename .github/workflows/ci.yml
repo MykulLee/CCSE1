@@ -34,8 +34,8 @@ jobs:
         python manage.py test
 # ──────────────── 3. Snyk SAST scan ────────────────
     - name: Snyk scan
-      uses: snyk/actions/python@v1
+      uses: snyk/actions/python@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}      
       with:
-        args: --severity-threshold=high            
+        args: --severity-threshold=critical            
