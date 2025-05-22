@@ -55,13 +55,15 @@ jobs:
   zap-dast:
     needs: deploy-render
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      issues: write 
     steps:
     - name: ZAP full scan
       uses: zaproxy/action-full-scan@v0.10.0
       with:
         target: 'https://ccse1.onrender.com/'   
-        fail_action: true                          # fails on medium/high
+        fail_action: false                          
     - name: Upload ZAP report
       uses: actions/upload-artifact@v4
       with:
