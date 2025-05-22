@@ -61,7 +61,8 @@ jobs:
       uses: zaproxy/action-full-scan@v0.10.0
       with:
         target: 'https://ccse1.onrender.com/'   
-        fail_action: false       
+        fail_action: false      
+        allow_issue_writing: false 
     - name: Upload ZAP HTML report
       uses: actions/upload-artifact@v4
       with:
