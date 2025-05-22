@@ -56,12 +56,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write 
     steps:
     - name: ZAP full scan
       uses: zaproxy/action-full-scan@v0.10.0
       with:
         target: 'https://ccse1.onrender.com/'   
         fail_action: false       
-        artifact_name: zap-report
-        output_path: .            
+    - name: Upload ZAP HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: zap-report            # letters, numbers, -, _, .
+        path: report_html.html      # exact filename ZAP creates          
