@@ -51,3 +51,19 @@ jobs:
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
         api-key:    ${{ secrets.RENDER_API_KEY }}
         wait-for-success: true
+# 5. ZAP DAST scan
+  zap-dast:
+    needs: deploy-render
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ZAP full scan
+      uses: zaproxy/action-full-scan@v0.10.0
+      with:
+        target: 'https://ccse1.onrender.com/'   
+        fail_action: true                          # fails on medium/high
+    - name: Upload ZAP report
+      uses: actions/upload-artifact@v4
+      with:
+        name: zap-report
+        path: owasp-zap-report.html
