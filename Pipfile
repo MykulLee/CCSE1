@@ -8,6 +8,7 @@ django = "*"
 pillow = "*"
 python-dotenv = "*"
 django-csp = "*"
+gunicorn = "*"
 
 [dev-packages]
 
