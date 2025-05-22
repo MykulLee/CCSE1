@@ -1,6 +1,6 @@
 name: CI-CD-DevSecOps
 
-# ──────────────── 1. When to run ────────────────
+# 1. When to run
 on:
   push:
     branches: [ sec-cw2 ]     # branch Render builds; add "main" later
@@ -12,7 +12,7 @@ permissions:
   security-events: write
 
 jobs:
-# ──────────────── 2. Build & unit tests ────────────────
+# 2. Build & unit tests
   build-test:
     runs-on: ubuntu-latest
 
@@ -32,10 +32,22 @@ jobs:
     - name: Run Django tests
       run: |
         python manage.py test
-# ──────────────── 3. Snyk SAST scan ────────────────
+# 3. Snyk SAST scan
     - name: Snyk scan
       uses: snyk/actions/python@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}      
       with:
         args: --severity-threshold=critical            
+# 4. Deploy to Render
+  deploy-render:
+    needs: build-test            
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger Render deploy
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key:    ${{ secrets.RENDER_API_KEY }}
+        wait-for-success: true
