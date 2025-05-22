@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 <h1>Checkout</h1>
 <form method="post" action="{% url 'place_order' %}" style="text-align: center;">
     {% csrf_token %}

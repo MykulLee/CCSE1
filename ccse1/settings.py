@@ -10,6 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+try:
+    from django.core.servers.basehttp import WSGIRequestHandler
+
+    # 1) blank out the version string used by BaseHTTPRequestHandler
+    WSGIRequestHandler.server_version = "secure"
+    WSGIRequestHandler.sys_version = ""
+
+    # 2) drop any explicit "Server:" header that send_header may write
+    _orig_send_header = WSGIRequestHandler.send_header
+
+    def _send_header_no_server(self, keyword, value, *args, **kwargs):
+        if keyword.lower() == "server":
+            return                          # skip it
+        return _orig_send_header(self, keyword, value, *args, **kwargs)
+
+    WSGIRequestHandler.send_header = _send_header_no_server
+except ImportError:
+    pass
+
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -32,7 +51,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+     "localhost",
+     "127.0.0.1",
+     "host.docker.internal",   # allow ZAP’s Host header
+ ]
 
 
 # Application definition
@@ -44,11 +67,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'volleyball.apps.VolleyballConfig'
+    'volleyball.apps.VolleyballConfig',
+    'csp',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "csp.middleware.CSPMiddleware",
+    "ccse1.security_headers.PermissionsPolicyMiddleware",
+    "ccse1.security_headers.StripServerHeaderMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,6 +83,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# New django-csp 4.0+ settings
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": ("'self'",),
+        "style-src":   ("'self'", "fonts.googleapis.com"),
+        "font-src":    ("'self'", "fonts.gstatic.com"),
+        "script-src":  ("'self'",),
+        "object-src":  ("'none'",),
+        "base-uri":    ("'self'",),
+        "form-action": ("'self'",),
+        "frame-ancestors": ("'none'",),
+    },
+}
 
 ROOT_URLCONF = 'ccse1.urls'
 

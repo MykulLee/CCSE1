@@ -3,7 +3,7 @@
 {% block content %}
 <h1>My Account</h1>
 
-<form method="POST">
+<form method="POST" action="{% url 'account' %}">
     {% csrf_token %}
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
@@ -20,3 +20,4 @@
     <button type="submit" class="btn btn-primary">Update Account</button>
 </form>
 {% endblock %}
+

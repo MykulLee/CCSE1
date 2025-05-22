@@ -1,0 +1,219 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "SnykCode",
+          "semanticVersion": "1.0.0",
+          "version": "1.0.0",
+          "rules": [
+            {
+              "id": "python/DjangoUnvalidatedPassword",
+              "name": "DjangoUnvalidatedPassword",
+              "shortDescription": {
+                "text": "Password Requirements Not Enforced in Django Application"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "help": {
+                "markdown": "\n## Details\n\nDjango applications allow the developer to configure password policies that\nensure users provide reasonably secure passwords.\n\nIn custom forms, the developer is able to call `User.set_password()` directly on\nuser input, which allows users to provide passwords that may not meet the\napplication requirements.\n\n## Best practises for prevention\n\n* When implementing custom password setting forms, first call\n  `django.shortcuts.validate_password()` on user input before calling\n  `set_password()` on it.",
+                "text": ""
+              },
+              "properties": {
+                "tags": [
+                  "python",
+                  "DjangoUnvalidatedPassword",
+                  "Security",
+                  "SourceServer",
+                  "SourceHttpParam"
+                ],
+                "categories": [
+                  "Security"
+                ],
+                "exampleCommitFixes": [],
+                "exampleCommitDescriptions": [],
+                "precision": "very-high",
+                "repoDatasetSize": 0,
+                "cwe": [
+                  "CWE-521"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "python/DjangoUnvalidatedPassword",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "A password from an HTTP parameter flows into set_password, without first having django.contrib.auth.password_validation.validate_password called on it. This may allow passwords to be set that don't conform to the application's password policy.",
+            "markdown": "A password from {0} {1} into {2}, without first having django.contrib.auth.password_validation.validate_password called on it. This may allow passwords to be set that don't conform to the application's password policy.",
+            "arguments": [
+              "[an HTTP parameter](0)",
+              "[flows](1),(2),(3)",
+              "[set_password](4)"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "volleyball/views.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 148,
+                  "endLine": 148,
+                  "startColumn": 31,
+                  "endColumn": 43
+                }
+              }
+            }
+          ],
+          "fingerprints": {
+            "0": "95b8e376d4d25da120cdcdcc83c9bfb4dcd594e20bef2d4d3ec72999e943a750",
+            "1": "c4138ccd.113c0927.79e62dc9.139c59a8.1d07cee4.ba14daf2.081ac3f4.ebed174f.7e401efd.e8f9e762.e05f0ba7.558140b1.d40ba80d.a5d7f69f.cf308c7a.91057b05"
+          },
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "id": 0,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "volleyball/views.py",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "startColumn": 24,
+                            "endColumn": 36
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "id": 1,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "volleyball/views.py",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "startColumn": 24,
+                            "endColumn": 36
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "id": 2,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "volleyball/views.py",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "startColumn": 24,
+                            "endColumn": 40
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "id": 3,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "volleyball/views.py",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 148,
+                            "endLine": 148,
+                            "startColumn": 31,
+                            "endColumn": 43
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "id": 4,
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "volleyball/views.py",
+                            "uriBaseId": "%SRCROOT%"
+                          },
+                          "region": {
+                            "startLine": 148,
+                            "endLine": 148,
+                            "startColumn": 13,
+                            "endColumn": 30
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "priorityScore": 250,
+            "priorityScoreFactors": [
+              {
+                "label": true,
+                "type": "hotFileCodeFlow"
+              }
+            ],
+            "isAutofixable": false
+          }
+        }
+      ],
+      "properties": {
+        "coverage": [
+          {
+            "isSupported": true,
+            "lang": "HTML",
+            "files": 6,
+            "type": "SUPPORTED"
+          },
+          {
+            "isSupported": true,
+            "lang": "Python",
+            "files": 18,
+            "type": "SUPPORTED"
+          },
+          {
+            "isSupported": true,
+            "lang": "XML",
+            "files": 1,
+            "type": "SUPPORTED"
+          },
+          {
+            "isSupported": false,
+            "lang": "HTML",
+            "files": 5,
+            "type": "FAILED_PARSING"
+          }
+        ]
+      }
+    }
+  ]
+}

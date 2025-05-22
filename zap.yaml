@@ -3,7 +3,8 @@ env:
   - excludePaths: []
     name: baseline
     urls:
-    - http://host.docker.internal:8000
+    - http://host.docker.internal:8000/volleyball/checkout/
+    - http://host.docker.internal:8000/
   parameters:
     failOnError: true
     progressToStdout: false
@@ -14,7 +15,7 @@ jobs:
   type: passiveScan-config
 - parameters:
     maxDuration: 1
-    url: http://host.docker.internal:8000
+    url: http://host.docker.internal:8000/
   type: spider
 - parameters:
     maxDuration: 0
@@ -27,21 +28,21 @@ jobs:
 - parameters:
     reportDescription: ''
     reportDir: /zap/wrk/
-    reportFile: zap_baseline.html
+    reportFile: scans/zap_v3_final.html
     reportTitle: ZAP Scanning Report
     template: traditional-html
   type: report
 - parameters:
     reportDescription: ''
     reportDir: /zap/wrk/
-    reportFile: zap_baseline.md
+    reportFile: scans/zap_v3_final.md
     reportTitle: ZAP Scanning Report
     template: traditional-md
   type: report
 - parameters:
     reportDescription: ''
     reportDir: /zap/wrk/
-    reportFile: zap_baseline.xml
+    reportFile: scans/zap_v3_final.xml
     reportTitle: ZAP Scanning Report
     template: traditional-xml
   type: report
