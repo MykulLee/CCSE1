@@ -55,17 +55,18 @@ jobs:
     needs: deploy-render
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read            
     steps:
     - name: ZAP full scan
       uses: zaproxy/action-full-scan@v0.10.0
-      with:
-        target: 'https://ccse1.onrender.com/'   
-        fail_action: false      
+      with:                     
+        target: https://ccse1.onrender.com/
+        fail_action: false
         allow_issue_writing: false
-        publish_html_report: false  
+        publish_html_report: false     
+
     - name: Upload ZAP HTML report
       uses: actions/upload-artifact@v4
       with:
-        name: zap-report               # artefact name 
-        path: report_html.html         # ZAP’s report filename
+        name: zap-report
+        path: report_html.html         # file ZAP drops into $GITHUB_WORKSPACE
