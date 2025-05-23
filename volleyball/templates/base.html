@@ -11,9 +11,6 @@
     <title>Victorious Volleyball</title>
   </head>
   <body>
-    <form id="__csrf" method="post" style="display:none;">
-      {% csrf_token %}
-     </form>
     {% if not request.path == '/volleyball/register/' and not request.path == '/volleyball/login/' %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
