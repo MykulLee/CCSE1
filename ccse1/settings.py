@@ -54,12 +54,7 @@ DEBUG = True
 env_hosts = os.getenv('ALLOWED_HOSTS', '').split(',')
 render_host = os.getenv('RENDER_EXTERNAL_HOSTNAME')
 
-ALLOWED_HOSTS = [
-    *filter(None, env_hosts),  
-    render_host,                
-    'localhost',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
