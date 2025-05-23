@@ -1,0 +1,47 @@
+name: ZAP post-deploy active scan
+
+on:
+  schedule:
+    # 02:00 UTC every night
+    - cron:  '0 2 * * *'
+  workflow_dispatch:       # enable manual run from Actions tab
+
+env:
+  RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+  RENDER_API_KEY:    ${{ secrets.RENDER_API_KEY }}
+
+jobs:
+  fetch-url:
+    runs-on: ubuntu-latest
+    outputs:
+      live_url: ${{ steps.render.outputs.url }}
+    steps:
+      - name: Query Render API
+        id: render
+        shell: bash
+        run: |
+          url=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" \
+                  https://api.render.com/v1/services/$RENDER_SERVICE_ID | jq -r '.service.url')
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+  zap-active:
+    needs: fetch-url
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: ZAP full scan (production)
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: ${{ needs.fetch-url.outputs.live_url }}
+          cmd_options: '-n -J zap_report.json'
+          max_alerts: 5
+          fail_action: true
+
+      - name: Upload artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-postdeploy
+          path: |
+            zap_report.json
+            zap_report.html
