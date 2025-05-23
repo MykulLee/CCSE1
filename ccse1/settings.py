@@ -49,6 +49,8 @@ CSRF_COOKIE_SECURE = True           # cookie only over HTTPS
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv("DJANGO_SECRET")
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY environmental variable not set")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
