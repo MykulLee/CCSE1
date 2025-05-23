@@ -62,5 +62,5 @@ jobs:
       with:
         target: https://ccse1.onrender.com/
         fail_action: false
-        cmd_options: '-r zap_report.html'    # ← tell ZAP to create HTML report
+        cmd_options: '-r /tmp/zap_report.html'    # ← tell ZAP to create HTML report
         artifact_name: zap-report            # ← legal artefact name
