@@ -52,6 +52,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "ccse1.onrender.com",
      "localhost",
      "127.0.0.1",
      "host.docker.internal",   # allow ZAP’s Host header
