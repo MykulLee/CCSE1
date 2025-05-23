@@ -55,7 +55,7 @@ jobs:
     needs: deploy-render
     runs-on: ubuntu-latest
     permissions:
-      contents: read          # omit issues: write → no auto-issues
+      contents: read          
     steps:
     - name: ZAP full scan
       uses: zaproxy/action-full-scan@v0.10.0
@@ -63,4 +63,4 @@ jobs:
         target: https://ccse1.onrender.com/
         fail_action: false
         allow_issue_writing: false
-        artifact_name: ""
+        upload_artifact: false  
