@@ -62,6 +62,7 @@ jobs:
       with:
         target: https://ccse1.onrender.com/
         fail_action: false
-        allow_issue_writing: false
-        publish_html_report: false      # skip internal upload
-        artifact_name: ""               # empty → no artefact step
+        cmd_options: '-r /tmp/zap_report.html'  # write report in writable dir
+        output_path: /tmp                      # tell action where the file is
+        artifact_name: zap-report              # artefact visible in run UI
+        allow_issue_writing: false           # empty → no artefact step
