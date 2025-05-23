@@ -62,5 +62,6 @@ jobs:
       with:
         target: https://ccse1.onrender.com/
         fail_action: false
-        cmd_options: '-r /tmp/zap_report.html'    # ← tell ZAP to create HTML report
-        artifact_name: zap-report            # ← legal artefact name
+        cmd_options: '-r /tmp/zap_report.html'
+        artifact_name: zap-report
+        allow_issue_writing: false      # ← disables Issue API call
