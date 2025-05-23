@@ -12,57 +12,65 @@ permissions:
   security-events: write
 
 jobs:
-# 2. Build & unit tests
+  # 2. Build & unit tests
   build-test:
     runs-on: ubuntu-latest
 
+    # expose the secret so Django.settings can read it
+    env:
+      DJANGO_SECRET: ${{ secrets.DJANGO_SECRET }}
+      
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run Django tests
-      run: |
-        python manage.py test
-# 3. Snyk SAST scan
-    - name: Snyk scan
-      uses: snyk/actions/python@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}      
-      with:
-        args: --severity-threshold=critical            
-# 4. Deploy to Render
+      - name: Run Django tests
+        run: |
+          python3 manage.py test
+
+      # 3. Snyk SAST scan
+      - name: Snyk scan
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=critical
+
+  # 4. Deploy to Render
   deploy-render:
-    needs: build-test            
+    needs: build-test
     runs-on: ubuntu-latest
 
     steps:
-    - name: Trigger Render deploy
-      uses: johnbeynon/render-deploy-action@v0.0.8
-      with:
-        service-id: ${{ secrets.RENDER_SERVICE_ID }}
-        api-key:    ${{ secrets.RENDER_API_KEY }}
-# 5. ZAP DAST scan
+      - name: Trigger Render deploy
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key:    ${{ secrets.RENDER_API_KEY }}
+
+  # 5. ZAP DAST scan
   zap-dast:
     needs: deploy-render
     runs-on: ubuntu-latest
     permissions:
       contents: read
+
     steps:
-    - name: ZAP full scan
-      uses: zaproxy/action-full-scan@v0.10.0
-      with:
-        target: https://ccse1.onrender.com/
-        fail_action: false
-        cmd_options: '-r /tmp/zap_report.html'  # write report in writable dir
-        output_path: /tmp                      # tell action where the file is
-        artifact_name: zap-report              # artefact visible in run UI
-        allow_issue_writing: false           # empty → no artefact step
+      - name: ZAP full scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: https://ccse1.onrender.com/
+          fail_action: false
+          cmd_options: '-r /tmp/zap_report.html'
+          output_path: /tmp
+          artifact_name: zap-report
+          allow_issue_writing: false
