@@ -63,3 +63,4 @@ jobs:
         target: https://ccse1.onrender.com/
         fail_action: false
         artifact_name: zap-report      # <-- legal name, replaces zap_scan
+        allow_issue_writing: false
