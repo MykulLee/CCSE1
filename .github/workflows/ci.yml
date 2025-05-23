@@ -62,3 +62,4 @@ jobs:
       with:
         target: https://ccse1.onrender.com/
         fail_action: false
+        allow_issue_writing: false
