@@ -41,6 +41,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")    # load variables before we reference them
 
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
 AUTH_USER_MODEL = 'volleyball.CustomUser'
 
 CSRF_COOKIE_SECURE = True           # cookie only over HTTPS
@@ -80,10 +86,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     "csp.middleware.CSPMiddleware",
-    "ccse1.security_headers.PermissionsPolicyMiddleware",
-    "ccse1.security_headers.StripServerHeaderMiddleware",
+    'ccse1.security_headers.PermissionsPolicyMiddleware',
+    'ccse1.security_headers.StripServerHeaderMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,6 +98,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # New django-csp 4.0+ settings
 CONTENT_SECURITY_POLICY = {
@@ -168,11 +177,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
