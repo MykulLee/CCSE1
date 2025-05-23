@@ -33,6 +33,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('1', 'true', 'yes')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,7 +56,12 @@ DEBUG = True
 env_hosts = os.getenv('ALLOWED_HOSTS', '').split(',')
 render_host = os.getenv('RENDER_EXTERNAL_HOSTNAME')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    *filter(None, env_hosts),  
+    render_host,                
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
