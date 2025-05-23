@@ -62,5 +62,5 @@ jobs:
       with:
         target: https://ccse1.onrender.com/
         fail_action: false
-        allow_issue_writing: false
-        cmd_options: "-cmd -quickurl https://ccse1.onrender.com/"
+        cmd_options: '-r zap_report.html'    # ← tell ZAP to create HTML report
+        artifact_name: zap-report            # ← legal artefact name
